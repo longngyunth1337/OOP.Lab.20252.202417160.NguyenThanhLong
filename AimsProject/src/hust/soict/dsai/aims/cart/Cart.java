@@ -7,7 +7,6 @@ public class Cart {
     private DigitalVideoDisc[] itemsOrdered = new DigitalVideoDisc[MAX_NUMBERS_ORDERED];
     private int qtyOrdered = 0;
 
-
     public void addDigitalVideoDisc(DigitalVideoDisc disc) {
         if (qtyOrdered < MAX_NUMBERS_ORDERED) {
             itemsOrdered[qtyOrdered] = disc;
@@ -18,26 +17,15 @@ public class Cart {
         }
     }
 
-
     public void addDigitalVideoDisc(DigitalVideoDisc[] dvdList) {
         for (DigitalVideoDisc disc : dvdList) {
-            if (qtyOrdered < MAX_NUMBERS_ORDERED) {
-                addDigitalVideoDisc(disc);
-            } else {
-                System.out.println("The cart is almost full. Stop adding.");
-                break;
-            }
+            addDigitalVideoDisc(disc);
         }
     }
 
-
     public void addDigitalVideoDisc(DigitalVideoDisc dvd1, DigitalVideoDisc dvd2) {
-        if (qtyOrdered + 2 <= MAX_NUMBERS_ORDERED) {
-            addDigitalVideoDisc(dvd1);
-            addDigitalVideoDisc(dvd2);
-        } else {
-            System.out.println("The cart is full, cannot add both discs.");
-        }
+        addDigitalVideoDisc(dvd1);
+        addDigitalVideoDisc(dvd2);
     }
 
     public void removeDigitalVideoDisc(DigitalVideoDisc disc) {
@@ -68,5 +56,30 @@ public class Cart {
             total += itemsOrdered[i].getCost();
         }
         return total;
+    }
+
+    public void print() {
+        System.out.println("Ordered Items:");
+        for (int i = 0; i < qtyOrdered; i++) {
+            System.out.println((i + 1) + ". DVD - " + itemsOrdered[i].getTitle() + " - " 
+                    + itemsOrdered[i].getCategory() + " - " + itemsOrdered[i].getDirector() + " - " 
+                    + itemsOrdered[i].getLength() + ": " + itemsOrdered[i].getCost() + " $");
+        }
+        System.out.println("Total cost: " + totalCost() + " $");
+        
+    }
+
+    public void searchByTitle(String title) {
+        boolean found = false;
+        System.out.println("Searching for DVDs with title: \"" + title + "\"...");
+        for (int i = 0; i < qtyOrdered; i++) {
+            if (itemsOrdered[i].getTitle().toLowerCase().contains(title.toLowerCase())) {
+                System.out.println("Found match: " + itemsOrdered[i].getTitle());
+                found = true;
+            }
+        }
+        if (!found) {
+            System.out.println("No match found for: \"" + title + "\"");
+        }
     }
 }
