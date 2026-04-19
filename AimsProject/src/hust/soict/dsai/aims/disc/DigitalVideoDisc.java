@@ -1,11 +1,12 @@
+package hust.soict.dsai.aims.disc;
+
 public class DigitalVideoDisc {
     private String title;
     private String category;
     private String director;
     private int length;
     private float cost;
-    
-    
+
     public DigitalVideoDisc(String title) {
         this.title = title;
     }
@@ -21,11 +22,9 @@ public class DigitalVideoDisc {
         this.director = director;
     }
 
-    
     public DigitalVideoDisc(String title, String category, String director, int length, float cost) {
         this(title, category, director, cost);
-        this.length  =  length;
-        this.cost  =  cost;
+        this.length = length;
     }
 
     public String getTitle() {
@@ -37,12 +36,13 @@ public class DigitalVideoDisc {
     }
 
     public String getDirector() {
-         return director;
+        return director;
     }
 
     public int getLength() {
         return length;
     }
+
     public float getCost() {
         return cost;
     }

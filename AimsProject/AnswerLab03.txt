@@ -1,0 +1,17 @@
+
+
+Section 2.1:
+- Both approaches provide the capability to process multiple DigitalVideoDisc objects simultaneously.
+- Using standard arrays requires explicit instantiation and wrapping of objects, which can be rigid and verbose for the caller.
+- Varargs (Variable Arguments) act as "syntactical sugar," allowing a method to accept zero or more arguments directly without manual array creation.
+- Recommendation: Varargs are superior for method overloading as they offer a more intuitive and streamlined interface for managing DVD collections.
+
+Section 3:
+- Java operates exclusively on a Pass-by-Value mechanism. When passing an object (e.g., Hugh Williams or Diana), Java copies the "handle" (memory reference) rather than the actual "entity" (object).
+- The swap() failure: The method only reassigns the local copies of references stored on the Stack. Once the method scope ends, these local swaps vanish, leaving the original objects in main() at their initial Heap locations.
+- The changeTitle() success: Since the copied reference still points to the shared object on the Heap, calling a setter method directly accesses and modifies the object's internal state.
+- Proper Swapping: To effectively exchange two DVD entities, one must perform a deep copy swap by manually transferring all internal attributes (Title, Category, Director, etc.) between the objects.
+
+Section 9:
+- The '+' Operator Bottleneck: Strings in Java are immutable. Concatenating strings in a loop using '+' forces the JVM to create a new object for every single iteration, leading to significant memory fragmentation and "garbage" accumulation.
+- StringBuilder Efficiency: This class provides a mutable buffer that can be reshaped in-place. It eliminates the need for redundant object creation, making it the optimal choice for high-performance string manipulation and heavy data processing.
