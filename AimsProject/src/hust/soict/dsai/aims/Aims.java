@@ -30,7 +30,7 @@ public class Aims {
                     viewStore();
                     break;
                 case 2:
-                    System.out.println("Update store will be implemented next.");
+                    updateStore();
                     break;
                 case 3:
                     seeCurrentCart();
@@ -376,6 +376,141 @@ public class Aims {
         System.out.println("An order has been created.");
         cart.clear();
     }
+    private static void addDVDToStore() {
+        System.out.print("ID: ");
+        int id = readInt();
+
+        System.out.print("Title: ");
+        String title = scanner.nextLine();
+
+        System.out.print("Category: ");
+        String category = scanner.nextLine();
+
+        System.out.print("Director: ");
+        String director = scanner.nextLine();
+
+        System.out.print("Length: ");
+        int length = readInt();
+
+        System.out.print("Cost: ");
+        float cost = readFloat();
+
+        DigitalVideoDisc dvd = new DigitalVideoDisc(id, title, category, cost, length, director);
+        store.addMedia(dvd);
+    }
+    private static void addBookToStore() {
+        System.out.print("ID: ");
+        int id = readInt();
+
+        System.out.print("Title: ");
+        String title = scanner.nextLine();
+
+        System.out.print("Category: ");
+        String category = scanner.nextLine();
+
+        System.out.print("Cost: ");
+        float cost = readFloat();
+
+        Book book = new Book(id, title, category, cost);
+
+        System.out.print("Authors, separated by comma: ");
+        String authorsInput = scanner.nextLine();
+
+        String[] authors = authorsInput.split(",");
+        for (String author : authors) {
+            String trimmed = author.trim();
+            if (!trimmed.isEmpty()) {
+                book.addAuthor(trimmed);
+            }
+        }
+
+        System.out.print("Content: ");
+        String content = scanner.nextLine();
+        book.setContent(content);
+
+        store.addMedia(book);
+    }
+    private static void addCDToStore() {
+        System.out.print("ID: ");
+        int id = readInt();
+
+        System.out.print("Title: ");
+        String title = scanner.nextLine();
+
+        System.out.print("Category: ");
+        String category = scanner.nextLine();
+
+        System.out.print("Director: ");
+        String director = scanner.nextLine();
+
+        System.out.print("Artist: ");
+        String artist = scanner.nextLine();
+
+        System.out.print("Cost: ");
+        float cost = readFloat();
+
+        CompactDisc cd = new CompactDisc(id, title, category, cost, director, artist);
+
+        System.out.print("Number of tracks: ");
+        int numberOfTracks = readInt();
+
+        for (int i = 0; i < numberOfTracks; i++) {
+            System.out.print("Track title: ");
+            String trackTitle = scanner.nextLine();
+
+            System.out.print("Track length: ");
+            int trackLength = readInt();
+
+            cd.addTrack(new Track(trackTitle, trackLength));
+        }
+
+        store.addMedia(cd);
+    }
+    private static void removeMediaFromStore() {
+        System.out.print("Enter title to remove: ");
+        String title = scanner.nextLine();
+
+        Media media = store.searchByTitle(title);
+
+        if (media == null) {
+            System.out.println("Media not found.");
+            return;
+        }
+
+        store.removeMedia(media);
+    }
+    private static void updateStore() {
+        System.out.println("Update store:");
+        System.out.println("--------------------------------");
+        System.out.println("1. Add DVD");
+        System.out.println("2. Add Book");
+        System.out.println("3. Add CD");
+        System.out.println("4. Remove media");
+        System.out.println("0. Back");
+        System.out.println("--------------------------------");
+        System.out.println("Please choose a number: 0-1-2-3-4");
+
+        int choice = readInt();
+
+        switch (choice) {
+            case 1:
+                addDVDToStore();
+                break;
+            case 2:
+                addBookToStore();
+                break;
+            case 3:
+                addCDToStore();
+                break;
+            case 4:
+                removeMediaFromStore();
+                break;
+            case 0:
+                break;
+            default:
+                System.out.println("Invalid choice.");
+        }
+    }
     public static void showMenu() {
         System.out.println("AIMS: ");
         System.out.println("--------------------------------");
@@ -393,6 +528,15 @@ public class Aims {
                 return Integer.parseInt(scanner.nextLine());
             } catch (NumberFormatException e) {
                 System.out.print("Please enter an integer: ");
+            }
+        }
+    }
+    private static float readFloat() {
+        while (true) {
+            try {
+                return Float.parseFloat(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.print("Please enter a number: ");
             }
         }
     }
