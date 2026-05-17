@@ -33,7 +33,7 @@ public class Aims {
                     System.out.println("Update store will be implemented next.");
                     break;
                 case 3:
-                    cart.print();
+                    seeCurrentCart();
                     break;
                 case 0:
                     System.out.println("Goodbye!");
@@ -182,7 +182,7 @@ public class Aims {
                     playMediaFromStore();
                     break;
                 case 4:
-                    cart.print();
+                    seeCurrentCart();
                     break;
                 case 0:
                     break;
@@ -262,6 +262,119 @@ public class Aims {
         } else {
             System.out.println("This media cannot be played.");
         }
+    }
+    public static void cartMenu() {
+        System.out.println("Options: ");
+        System.out.println("--------------------------------");
+        System.out.println("1. Filter medias in cart");
+        System.out.println("2. Sort medias in cart");
+        System.out.println("3. Remove media from cart");
+        System.out.println("4. Play a media");
+        System.out.println("5. Place order");
+        System.out.println("0. Back");
+        System.out.println("--------------------------------");
+        System.out.println("Please choose a number: 0-1-2-3-4-5");
+    }
+
+    private static void seeCurrentCart() {
+        int choice;
+
+        do {
+            cart.print();
+            cartMenu();
+            choice = readInt();
+
+            switch (choice) {
+                case 1:
+                    filterMediaInCart();
+                    break;
+                case 2:
+                    sortMediaInCart();
+                    break;
+                case 3:
+                    removeMediaFromCart();
+                    break;
+                case 4:
+                    playMediaFromCart();
+                    break;
+                case 5:
+                    placeOrder();
+                    break;
+                case 0:
+                    break;
+                default:
+                    System.out.println("Invalid choice.");
+            }
+        } while (choice != 0);
+    }
+
+    private static void filterMediaInCart() {
+        System.out.println("Filter by:");
+        System.out.println("1. ID");
+        System.out.println("2. Title");
+
+        int choice = readInt();
+
+        if (choice == 1) {
+            System.out.print("Enter id: ");
+            int id = readInt();
+            cart.searchById(id);
+        } else if (choice == 2) {
+            System.out.print("Enter title: ");
+            String title = scanner.nextLine();
+            cart.searchByTitle(title);
+        } else {
+            System.out.println("Invalid choice.");
+        }
+    }
+
+    private static void sortMediaInCart() {
+        System.out.println("Sort by:");
+        System.out.println("1. Title");
+        System.out.println("2. Cost");
+
+        int choice = readInt();
+
+        if (choice == 1) {
+            cart.sortByTitleCost();
+            cart.print();
+        } else if (choice == 2) {
+            cart.sortByCostTitle();
+            cart.print();
+        } else {
+            System.out.println("Invalid choice.");
+        }
+    }
+
+    private static void removeMediaFromCart() {
+        System.out.print("Enter title to remove: ");
+        String title = scanner.nextLine();
+
+        Media media = cart.searchByTitle(title);
+
+        if (media == null) {
+            return;
+        }
+
+        cart.removeMedia(media);
+    }
+
+    private static void playMediaFromCart() {
+        System.out.print("Enter title to play: ");
+        String title = scanner.nextLine();
+
+        Media media = cart.searchByTitle(title);
+
+        if (media == null) {
+            return;
+        }
+
+        playMedia(media);
+    }
+
+    private static void placeOrder() {
+        System.out.println("An order has been created.");
+        cart.clear();
     }
     public static void showMenu() {
         System.out.println("AIMS: ");
