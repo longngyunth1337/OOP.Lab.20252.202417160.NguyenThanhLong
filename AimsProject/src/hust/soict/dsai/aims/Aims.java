@@ -8,6 +8,8 @@ import hust.soict.dsai.aims.media.CompactDisc;
 import hust.soict.dsai.aims.media.DigitalVideoDisc;
 import hust.soict.dsai.aims.media.Track;
 import hust.soict.dsai.aims.store.Store;
+import hust.soict.dsai.aims.media.Media;
+import hust.soict.dsai.aims.media.Playable;
 
 public class Aims {
     private static Scanner scanner = new Scanner(System.in);
@@ -25,7 +27,7 @@ public class Aims {
 
             switch (choice) {
                 case 1:
-                    store.showInventory();
+                    viewStore();
                     break;
                 case 2:
                     System.out.println("Update store will be implemented next.");
@@ -139,7 +141,128 @@ public class Aims {
         store.addMedia(cd1);
         store.addMedia(cd2);
     }
+    public static void storeMenu() {
+        System.out.println("Options: ");
+        System.out.println("--------------------------------");
+        System.out.println("1. See a media's details");
+        System.out.println("2. Add a media to cart");
+        System.out.println("3. Play a media");
+        System.out.println("4. See current cart");
+        System.out.println("0. Back");
+        System.out.println("--------------------------------");
+        System.out.println("Please choose a number: 0-1-2-3-4");
+    }
 
+    public static void mediaDetailsMenu() {
+        System.out.println("Options: ");
+        System.out.println("--------------------------------");
+        System.out.println("1. Add to cart");
+        System.out.println("2. Play");
+        System.out.println("0. Back");
+        System.out.println("--------------------------------");
+        System.out.println("Please choose a number: 0-1-2");
+    }
+
+    private static void viewStore() {
+        int choice;
+
+        do {
+            store.showInventory();
+            storeMenu();
+            choice = readInt();
+
+            switch (choice) {
+                case 1:
+                    seeMediaDetails();
+                    break;
+                case 2:
+                    addMediaFromStoreToCart();
+                    break;
+                case 3:
+                    playMediaFromStore();
+                    break;
+                case 4:
+                    cart.print();
+                    break;
+                case 0:
+                    break;
+                default:
+                    System.out.println("Invalid choice.");
+            }
+        } while (choice != 0);
+    }
+
+    private static void seeMediaDetails() {
+        System.out.print("Enter media title: ");
+        String title = scanner.nextLine();
+
+        Media media = store.searchByTitle(title);
+
+        if (media == null) {
+            System.out.println("Media not found.");
+            return;
+        }
+
+        System.out.println(media);
+
+        int choice;
+
+        do {
+            mediaDetailsMenu();
+            choice = readInt();
+
+            switch (choice) {
+                case 1:
+                    cart.addMedia(media);
+                    System.out.println("Current cart size: " + cart.getNumberOfItems());
+                    break;
+                case 2:
+                    playMedia(media);
+                    break;
+                case 0:
+                    break;
+                default:
+                    System.out.println("Invalid choice.");
+            }
+        } while (choice != 0);
+    }
+
+    private static void addMediaFromStoreToCart() {
+        System.out.print("Enter media title to add to cart: ");
+        String title = scanner.nextLine();
+
+        Media media = store.searchByTitle(title);
+
+        if (media == null) {
+            System.out.println("Media not found.");
+            return;
+        }
+
+        cart.addMedia(media);
+        System.out.println("Current cart size: " + cart.getNumberOfItems());
+    }
+
+    private static void playMediaFromStore() {
+        System.out.print("Enter media title to play: ");
+        String title = scanner.nextLine();
+
+        Media media = store.searchByTitle(title);
+
+        if (media == null) {
+            System.out.println("Media not found.");
+            return;
+        }
+
+        playMedia(media);
+    }
+
+    private static void playMedia(Media media) {
+        if (media instanceof Playable) {
+            ((Playable) media).play();
+        } else {
+            System.out.println("This media cannot be played.");
+        }
+    }
     public static void showMenu() {
         System.out.println("AIMS: ");
         System.out.println("--------------------------------");
