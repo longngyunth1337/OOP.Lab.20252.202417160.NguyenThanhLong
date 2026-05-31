@@ -1,0 +1,32 @@
+Question:
+Programming with AWT and Swing is quite similar (similar elements including container/components,
+event-handling). However, there are some differences that you need to note:
+
+- The top-level containers in Swing and AWT
+- The class name of components in AWT and corresponding class's name in Swing
+
+Answer:
+Differences in top-level containers between Swing and AWT:
+
+- AWT: Uses Frame as the top-level container. Components can be added directly to the Frame.
+- Swing: Uses JFrame as the top-level container. Swing components should be added to the ContentPane of the JFrame instead of directly to the frame itself.
+
+Differences in component class names:
+
+- AWT components: Use names such as Frame, Label, Button, TextField, etc.
+- Swing components: Usually have a leading "J", such as JFrame, JLabel, JButton, JTextField, etc.
+
+Swing components are also lightweight components, while AWT components are heavyweight components and depend more directly on the native operating system GUI.
+
+==================================
+
+Question:
+The Aims class must be updated to handle any exceptions generated when the play() methods are
+called. What happens when you don't update for them to catch?
+
+Answer:
+If the Aims class is not updated to handle exceptions thrown by the play() methods, the program will not compile because PlayerException is a checked exception.
+
+After the Playable interface is updated to declare "throws PlayerException", every method that calls play() must either catch PlayerException using a try-catch block or declare that it also throws PlayerException.
+
+For example, when trying to play a DVD, CD, or Track with a non-positive length, the play() method will throw PlayerException. If this exception is not handled, the program cannot safely continue. Therefore, Aims should catch the exception and print the error information such as getMessage(), toString(), or printStackTrace(), or show an error dialog in the GUI.

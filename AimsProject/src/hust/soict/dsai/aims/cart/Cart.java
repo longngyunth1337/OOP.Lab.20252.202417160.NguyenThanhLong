@@ -1,16 +1,18 @@
 package hust.soict.dsai.aims.cart;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import hust.soict.dsai.aims.exception.PlayerException;
 import hust.soict.dsai.aims.media.DigitalVideoDisc;
 import hust.soict.dsai.aims.media.Media;
 import hust.soict.dsai.aims.media.Playable;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
+import java.util.Collections;
 
 public class Cart {
-    private ArrayList<Media> itemsOrdered = new ArrayList<Media>();
+    private ObservableList<Media> itemsOrdered = FXCollections.observableArrayList();
 
-    public ArrayList<Media> getItemsOrdered() {
+    public ObservableList<Media> getItemsOrdered() {
         return itemsOrdered;
     }
 
@@ -117,6 +119,7 @@ public class Cart {
                 } else {
                     System.out.println("This media cannot be played.");
                 }
+
                 return;
             }
         }

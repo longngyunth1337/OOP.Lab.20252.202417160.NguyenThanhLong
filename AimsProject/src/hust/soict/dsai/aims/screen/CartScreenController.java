@@ -4,8 +4,9 @@ import hust.soict.dsai.aims.cart.Cart;
 import hust.soict.dsai.aims.exception.PlayerException;
 import hust.soict.dsai.aims.media.Media;
 import hust.soict.dsai.aims.media.Playable;
-import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -14,6 +15,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 public class CartScreenController {
     private Cart cart;
     private ObservableList<Media> mediaItems;
+    private FilteredList<Media> filteredItems;
 
     @FXML
     private TableView<Media> tblMedia;
@@ -58,8 +60,9 @@ public class CartScreenController {
         colMediacategory.setCellValueFactory(new PropertyValueFactory<>("category"));
         colMediaCost.setCellValueFactory(new PropertyValueFactory<>("cost"));
 
-        mediaItems = FXCollections.observableArrayList(cart.getItemsOrdered());
-        tblMedia.setItems(mediaItems);
+        mediaItems = cart.getItemsOrdered();
+        filteredItems = new FilteredList<>(mediaItems, media -> true);
+        tblMedia.setItems(filteredItems);
 
         btnPlay.setVisible(false);
         btnRemove.setVisible(false);
@@ -69,15 +72,48 @@ public class CartScreenController {
         radioBtnFilterTitle.setToggleGroup(filterGroup);
         radioBtnFilterId.setSelected(true);
 
+        tfFilter.textProperty().addListener((observable, oldValue, newValue) -> showFilteredMedia());
+        radioBtnFilterId.selectedProperty().addListener((observable, oldValue, newValue) -> showFilteredMedia());
+        radioBtnFilterTitle.selectedProperty().addListener((observable, oldValue, newValue) -> showFilteredMedia());
+
         tblMedia.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> {
                     if (newValue != null) {
                         updateButtonBar(newValue);
+                    } else {
+                        btnPlay.setVisible(false);
+                        btnRemove.setVisible(false);
                     }
                 }
         );
 
+        mediaItems.addListener((ListChangeListener<Media>) change -> updateTotal());
+
         updateTotal();
+    }
+
+    private void showFilteredMedia() {
+        String filterText = tfFilter.getText();
+
+        if (filterText == null || filterText.isBlank()) {
+            filteredItems.setPredicate(media -> true);
+            return;
+        }
+
+        String lowerCaseFilter = filterText.toLowerCase();
+
+        filteredItems.setPredicate(media -> {
+            if (radioBtnFilterId.isSelected()) {
+                return String.valueOf(media.getId()).contains(lowerCaseFilter);
+            }
+
+            if (radioBtnFilterTitle.isSelected()) {
+                return media.getTitle() != null
+                        && media.getTitle().toLowerCase().contains(lowerCaseFilter);
+            }
+
+            return true;
+        });
     }
 
     private void updateButtonBar(Media media) {
@@ -91,7 +127,6 @@ public class CartScreenController {
 
         if (media != null) {
             cart.removeMedia(media);
-            mediaItems.remove(media);
             updateTotal();
 
             btnPlay.setVisible(false);
@@ -132,8 +167,7 @@ public class CartScreenController {
         alert.setContentText("Your order has been placed successfully!");
         alert.showAndWait();
 
-        mediaItems.clear();
-        cart.getItemsOrdered().clear();
+        cart.clear();
         updateTotal();
 
         btnPlay.setVisible(false);

@@ -21,7 +21,12 @@ public class CartScreen extends JFrame {
         this.cart = cart;
 
         JFXPanel fxPanel = new JFXPanel();
-        this.add(fxPanel);
+
+        // Quan trọng: tránh JavaFX runtime bị tắt sau khi đóng cửa sổ Cart.
+        Platform.setImplicitExit(false);
+
+        this.setLayout(new BorderLayout());
+        this.add(fxPanel, BorderLayout.CENTER);
 
         this.setTitle("Cart");
         this.setSize(new Dimension(1024, 768));
@@ -40,9 +45,17 @@ public class CartScreen extends JFrame {
 
                 Parent root = loader.load();
                 Scene scene = new Scene(root);
+
                 fxPanel.setScene(scene);
             } catch (IOException e) {
                 e.printStackTrace();
+
+                SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(
+                        this,
+                        "Cannot load cart.fxml: " + e.getMessage(),
+                        "Cart Screen Error",
+                        JOptionPane.ERROR_MESSAGE
+                ));
             }
         });
     }
