@@ -3,3 +3,6 @@ bin/
 .classpath 
 .project 
 .metadata/ 
+out/
+.idea/
+*.class

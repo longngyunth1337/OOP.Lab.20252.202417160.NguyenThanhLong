@@ -2,7 +2,7 @@ package hust.soict.dsai.aims.cart;
 
 import java.util.ArrayList;
 import java.util.Collections;
-
+import hust.soict.dsai.aims.exception.PlayerException;
 import hust.soict.dsai.aims.media.DigitalVideoDisc;
 import hust.soict.dsai.aims.media.Media;
 import hust.soict.dsai.aims.media.Playable;
@@ -104,17 +104,24 @@ public class Cart {
     }
 
     public void playMedia(String title) {
-        Media media = searchByTitle(title);
-
-        if (media == null) {
-            return;
+        for (Media media : itemsOrdered) {
+            if (media.getTitle().equals(title)) {
+                if (media instanceof Playable) {
+                    try {
+                        ((Playable) media).play();
+                    } catch (PlayerException e) {
+                        System.err.println("Cannot play media: " + media.getTitle());
+                        System.err.println(e.getMessage());
+                        e.printStackTrace();
+                    }
+                } else {
+                    System.out.println("This media cannot be played.");
+                }
+                return;
+            }
         }
 
-        if (media instanceof Playable) {
-            ((Playable) media).play();
-        } else {
-            System.out.println("This media cannot be played.");
-        }
+        System.out.println("Media not found in cart: " + title);
     }
 
     public void addDigitalVideoDisc(DigitalVideoDisc disc) {
